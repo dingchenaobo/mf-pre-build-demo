@@ -1,6 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const MFRemotePlugin = require('./mf.remote.plugin');
+
 module.exports = {
   mode: 'development',
   entry: './src/index.js',
@@ -57,5 +59,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'public/index.html'),
     }),
+    new MFRemotePlugin(),
   ]
 };
