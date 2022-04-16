@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 const writeRemote = require('./writeRemote.js');
 
-module.exports = async function prebuild({ dependencies }) {
+module.exports = async function prebuild({ dependencies, options }) {
   const exposes = await writeRemote(dependencies);
 
   webpack({
@@ -22,6 +22,7 @@ module.exports = async function prebuild({ dependencies }) {
       minimize: false,
       chunkIds: 'named',
     },
+    module: options.module,
     plugins: [
       new webpack.ProgressPlugin(),
       new webpack.container.ModuleFederationPlugin({

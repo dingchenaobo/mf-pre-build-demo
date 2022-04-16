@@ -16,9 +16,9 @@ class MFRemotePlugin {
   }
 
   apply(complier) {
-    // devDependencies remote 是没有意义的
+    const { options } = complier;
     const { dependencies } = this.pkg;
-    prebuild({ dependencies });
+    prebuild({ dependencies, options });
   }
 }
 
