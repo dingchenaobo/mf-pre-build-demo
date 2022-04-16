@@ -1,7 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const MFRemotePlugin = require('./mf.remote.plugin');
+const MFRemotePlugin = require('./runtimeRemotePlugin');
 
 module.exports = {
   mode: 'development',

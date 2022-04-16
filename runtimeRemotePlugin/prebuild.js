@@ -2,12 +2,10 @@ const path = require('path');
 const webpack = require('webpack');
 
 const writeRemote = require('./writeRemote.js');
-const cachePath = path.join(process.cwd(), '.cache');
 
 module.exports = async function prebuild({ dependencies }) {
-  await writeRemote(dependencies);
+  const exposes = await writeRemote(dependencies);
 
-  return;
   webpack({
     mode: 'development',
     devtool: false,
@@ -15,7 +13,7 @@ module.exports = async function prebuild({ dependencies }) {
     output: {
       chunkLoadingGlobal: 'webpackJsonp',
       uniqueName: 'runtime',
-      path: cachePath,
+      path: path.join(__dirname, 'remoteRuntime'),
       library: {
         type: 'commonjs',
       }
@@ -29,11 +27,10 @@ module.exports = async function prebuild({ dependencies }) {
       new webpack.container.ModuleFederationPlugin({
         name: 'mf-remote',
         filename: 'mf-remote.js',
-        // exposes: remoteFiles.reduce((pre, cur) => {
-        //   const { packageName, exposePath } = cur;
-        //   pre[`./${packageName}`] = `./${exposePath}` || packageName;
-        //   return pre;
-        // }, {}),
+        exposes: exposes.reduce((r, item) => {
+          r[item.packageName] = item.exposePath;
+          return r;
+        }, {}),
         shared: [
           'react',
           'react-dom',
